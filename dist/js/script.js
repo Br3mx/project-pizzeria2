@@ -63,8 +63,6 @@ const select = {
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
       thisProduct.initAmountWidget();
-
-      
       thisProduct.processOrder();
 
     }
@@ -208,7 +206,7 @@ const select = {
 
       if(thisWidget.input.value){
         thisWidget.setValue(thisWidget.input.value);
-      } if(!thisWidget.input.value){
+      } else {
         thisWidget.setValue(settings.amountWidget.defaultValue);
       }
 
@@ -233,7 +231,7 @@ const select = {
 
       /* TODO: Add validation */
       if(thisWidget.value !== newValue && !isNaN(newValue)
-      && settings.amountWidget.defaultMax >= newValue && settings.amountWidget.defaultMin <= newValue){
+      && newValue >= settings.amountWidget.defaultMin && newValue <= settings.amountWidget.defaultMax){
         thisWidget.value = newValue;
 
         thisWidget.announce();
@@ -244,22 +242,24 @@ const select = {
     initActions(){
       const thisWidget = this;
 
-      thisWidget.input.addEventListener('change', this.setValue(thisWidget.input.value));
-      thisWidget.linkDecrease.addEventListener('click', function() {
-      thisWidget.value -= 1;
-      thisWidget.setValue(thisWidget.value);
+      thisWidget.input.addEventListener('change', function () {
+        thisWidget.setValue(thisWidget.input.value); 
+      });
+      thisWidget.linkDecrease.addEventListener('click', function(event) {
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value -1);
       });
 
-      thisWidget.linkIncrease.addEventListener('click', function() {
-      thisWidget.value += 1;
-      thisWidget.setValue(thisWidget.value);
+      thisWidget.linkIncrease.addEventListener('click', function(event) {
+        event.preventDefault();
+        thisWidget.setValue(thisWidget.value +1);
       });
       
     }
     announce(){
       const thisWidget = this;
 
-      const event = new Event('upsated');
+      const event = new Event('updated');
       thisWidget.element.dispatchEvent(event);
     }
   }
