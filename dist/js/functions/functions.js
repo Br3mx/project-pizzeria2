@@ -52,4 +52,3 @@ Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
 Handlebars.registerHelper('joinValues', function(input, options) {
   return Object.values(input).join(options.fn(this));
 });
-
