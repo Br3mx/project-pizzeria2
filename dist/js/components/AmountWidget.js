@@ -10,11 +10,11 @@ class AmonutWidget extends BaseWidget {
 
       thisWidget.getElements(element);
 
-      /* if (thisWidget.input.value) {
-        thisWidget.setValue(thisWidget.input.value);
+      if (thisWidget.dom.input.value) {
+        thisWidget.setValue(thisWidget.dom.input.value);
       } else {
         thisWidget.setValue(settings.amountWidget.defaultValue);
-      } */
+      } 
 
       thisWidget.initActions();
 
