@@ -8,7 +8,9 @@ class Booking {
   constructor(bookElem) {
     const thisBooking = this;
 
-    const selectedTable = [];
+    
+    thisBooking.selectedTable = null;
+    thisBooking.selectedStarters = [];
 
     thisBooking.render(bookElem);
     thisBooking.initWidgets();
@@ -191,6 +193,12 @@ class Booking {
 
     thisBooking.dom.tables = bookElem.querySelectorAll(select.booking.tables);
     thisBooking.dom.allTables = bookElem.querySelector(select.booking.allTables);
+
+    thisBooking.dom.phone = thisBooking.dom.wrapper.querySelector(select.booking.phone);
+    thisBooking.dom.bookTable = thisBooking.dom.wrapper.querySelector(select.booking.bookTable);
+    thisBooking.dom.form = thisBooking.dom.wrapper.querySelector(select.booking.form);
+    thisBooking.dom.address = thisBooking.dom.wrapper.querySelector(select.booking.address);
+    thisBooking.dom.starters = thisBooking.dom.wrapper.querySelectorAll(select.booking.starters);
   }
   initTables(event) {
     const thisBooking = this;
@@ -248,10 +256,60 @@ class Booking {
     // AllTables
     thisBooking.dom.allTables.addEventListener('click', function(event){
         thisBooking.initTables(event);
+        thisBooking.sendBooking();
     });
   }
+  SelectedStarters() {
+    const thisBooking = this;
+    thisBooking.selectedStarters = [];
 
-  
+    for (const starter of thisBooking.dom.starters) {
+      if (starter.checked) {
+        thisBooking.selectedStarters.push(starter.value);
+      }
+    }
+
+    return thisBooking.selectedStarters;
+  }
+
+  sendBooking(){
+    const thisBooking = this;
+
+    const selectedStarters = thisBooking.SelectedStarters();
+
+    const url = settings.db.url + '/' + settings.db.bookings;
+
+    const payload = {
+      date: thisBooking.datePicker.value,
+      hour: thisBooking.hourPicker.value,
+      table: thisBooking.selectedTable,
+      duration: parseInt(thisBooking.hoursAmount.value),
+      ppl: parseInt(thisBooking.peopleAmount.value),
+      starters: selectedStarters,
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value
+    }
+
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    };
+    
+    fetch(url, options)
+      .then(response => response.json())
+      .then(() => {
+        thisBooking.makeBooked(
+          payload.date,
+          payload.hour,
+          payload.duration,
+          payload.table
+        );
+        console.log('zarezerwowano', payload);
+      })
+  }
 }
 
 export default Booking;
