@@ -9,7 +9,6 @@ class Booking {
     const thisBooking = this;
 
     const selectedTable = [];
-    thisBooking.selectedTable = selectedTable;
 
     thisBooking.render(bookElem);
     thisBooking.initWidgets();
@@ -193,34 +192,33 @@ class Booking {
     thisBooking.dom.tables = bookElem.querySelectorAll(select.booking.tables);
     thisBooking.dom.allTables = bookElem.querySelector(select.booking.allTables);
   }
-  initTables(event){
-    
+  initTables(event) {
     const thisBooking = this;
 
-    const clickedTable = event.target.closest('.table');
+    const clickedElem = event.target;
+    const selectTable = classNames.booking.selectTable;
+    if (!clickedElem.classList.contains('table'))
+      return;
+    if (clickedElem.classList.contains(classNames.booking.tableBooked)) {
+        alert('This table is already booked!')
+        return;
+      }
+    const clickedTable = clickedElem;
     let tableId = clickedTable.getAttribute(settings.booking.tableIdAttribute);
 
-    const tableIndex = thisBooking.selectedTable.indexOf(tableId);
+    if (thisBooking.selectedTable && thisBooking.selectedTable !== tableId) {
+      const selectedTable = thisBooking.dom.allTables.querySelector('.selected');
+      selectedTable.classList.remove(selectTable);
+    }
 
+    if (!clickedTable.classList.contains(classNames.booking.selectTable)) {
+      thisBooking.selectedTable = tableId;
+      clickedTable.classList.add(classNames.booking.selectTable);
+    }
     
-    if(event && event.target){
-
-        if(clickedTable !== thisBooking.booked){
-            clickedTable.classList.add(classNames.booking.selectTable);
-
-        } else {
-            clickedTable.classList.remove('.selected');
-            alert("This table is already booked")
-        }
-        
-        if (tableIndex !== -1) {
-            thisBooking.selectedTable.splice(tableIndex, 1);
-            clickedTable.classList.remove(classNames.booking.selectTable);
-        } else {
-            
-            thisBooking.selectedTable.push(tableId);
-            clickedTable.classList.add(classNames.booking.selectTable);
-        }
+    else {
+      thisBooking.selectedTable = null;
+      clickedTable.classList.remove(classNames.booking.selectTable);
     }
   }
   initWidgets() {

@@ -87,7 +87,7 @@
     booking: {
       loading: 'loading',
       tableBooked: 'booked',
-      selectTable: '.selected'
+      selectTable: 'selected'
     },
     nav: {
       active: 'active',
