@@ -144,7 +144,8 @@ class Booking {
     let allAvailable = false;
 
     if (
-      typeof thisBooking.booked[thisBooking.date] == "undefined" ||
+      typeof thisBooking.booked[thisBooking.date] == "undefined" 
+      ||
       typeof thisBooking.booked[thisBooking.date][thisBooking.hour] ==
         "undefined"
     ) {
@@ -167,6 +168,7 @@ class Booking {
       }
     }
   }
+  
   render(bookElem) {
     const thisBooking = this;
 
@@ -219,16 +221,26 @@ class Booking {
       selectedTable.classList.remove(selectTable);
     }
 
-    if (!clickedTable.classList.contains(classNames.booking.selectTable)) {
+    if (!clickedTable.classList.contains(selectTable)) {
       thisBooking.selectedTable = tableId;
-      clickedTable.classList.add(classNames.booking.selectTable);
+      clickedTable.classList.add(selectTable);
     }
     
     else {
       thisBooking.selectedTable = null;
-      clickedTable.classList.remove(classNames.booking.selectTable);
+      clickedTable.classList.remove(selectTable);
     }
   }
+  resetTables(){
+    const thisBooking = this;
+
+    for(let table of thisBooking.dom.tables){
+        table.classList.remove(classNames.booking.selectTable);
+    }
+
+    thisBooking.selectedTable = null;
+}
+  
   initWidgets() {
     const thisBooking = this;
     // PeopleAmount
@@ -251,13 +263,19 @@ class Booking {
     // UpdatedDom
     thisBooking.dom.wrapper.addEventListener("updated", function () {
       thisBooking.updateDOM();
+      thisBooking.resetTables();
     });
 
     // AllTables
     thisBooking.dom.allTables.addEventListener('click', function(event){
         thisBooking.initTables(event);
-        thisBooking.sendBooking();
+        
     });
+    // form
+    thisBooking.dom.form.addEventListener('submit', function(event){
+      event.preventDefault();
+      thisBooking.sendBooking();
+    })
   }
   SelectedStarters() {
     const thisBooking = this;
@@ -311,5 +329,4 @@ class Booking {
       })
   }
 }
-
 export default Booking;
