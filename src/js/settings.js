@@ -3,12 +3,14 @@
       menuProduct: "#template-menu-product",
       cartProduct: "#template-cart-product", // CODE ADDED
       bookingWidget: '#template-booking-widget',
+      home: "#template-home",
     },
     containerOf: {
       menu: "#product-list",
       cart: "#cart",
       pages: '#pages',
       booking: '.booking-wrapper',
+      home: '#home-wrapper'
     },
     all: {
       menuProducts: "#product-list > .product",
@@ -53,7 +55,7 @@
       
     },
     nav: {
-      links: '.main-nav a',
+      links: '.main-nav a, .home-opt a', 
     
     },
     // CODE ADDED START
@@ -134,6 +136,7 @@
       dateEndParamKey: 'date_lte',
       notRepeatParam: 'repeat=false',
       repeatParam: 'repeat_ne=false',
+      home: 'home',
     },
   };
 
@@ -147,5 +150,6 @@
     ),
     // CODE ADDED END
     bookingWidget: Handlebars.compile(document.querySelector(select.templateOf.bookingWidget).innerHTML),
+    home: Handlebars.compile(document.querySelector(select.templateOf.home).innerHTML),
   };
   

@@ -256,5 +256,7 @@
         "starters": ["lemonWater"]
       }
     ],
-    "bookings": []
+    "bookings": [],
+
+    "home": []
  }
